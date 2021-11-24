@@ -4,7 +4,7 @@ define('SQLPWD', 'root');
 require_once('./db.php');
 
 if(!empty($_REQUEST['addStock'])) {
-    // ajout stock
+    // ajout stock 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
 }
 
 if(!empty($_REQUEST['addSale'])) {
