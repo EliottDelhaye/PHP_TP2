@@ -1,4 +1,4 @@
 AuthType Basic
 AuthName "Accès au site de pré-production"
-AuthUserFile c:/wamp64/www/eliott/PHP_TP2/.htpasswd
+AuthUserFile c:/wamp64/www/PHP_TP2/.htpasswd
 Require valid-user
