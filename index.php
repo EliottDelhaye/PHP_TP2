@@ -4,25 +4,30 @@ define('SQLPWD', '');
 require_once('./db.php');
 
 if(!empty($_REQUEST['addStock'])) {
-    // ajout stock 
+    addStock($_REQUEST['couleurs'], $_REQUEST['marques'],  $_REQUEST['prix_achat'] ) ;
 }
 
 if(!empty($_REQUEST['addSale'])) {
-    // ajout vente
+    sellCar($_REQUEST['info_voiture'],$_REQUEST['price'] ) ;
 }
+
+
 
 
 
 $stocks=getStocks();
 $ventes=getSales();
-
-var_dump($stocks);
-
-
+$marques=getModels();
+$couleurs=getColors();
 
 
 
 
+
+
+/**var_dump($stocks);
+var_dump($ventes);
+*/
 
 ?>
 
@@ -59,7 +64,7 @@ var_dump($stocks);
         }
 
         tbody {
-            background-color: #e4f0f5;
+            background-color: #606060;
         }
 
         caption {
@@ -112,50 +117,71 @@ var_dump($stocks);
         }
         
 
-    </style>
+    .gestionnaire {
+	font-size: x-large;
+	text-align: center;
+	font-weight: bold;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+    .Ce {
+	text-align: center;
+}
+    body {
+	background-repeat: repeat;
+}
+</style>
 
-    </head>
-    <body>
-    <h1>Gestionnaire</h1>
-        <p>Ce gestionnaire est un test réalisé par E.DELHAYE</p>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+    <body bgcolor="#606060" background="Sans titre (1).png" text="#FFFFFF">
+<h1 class="gestionnaire">Gestionnaire</h1>
+<p class="Ce">Ce gestionnaire est un test réalisé par E.DELHAYE</p>
+<hr>
 
         <form>
             
 
-                <fieldset>
-                    <legend>Entrée d'un stock</legend>
+              <fieldset>
+                    <legend>Entrée d'un stock </legend>
             
-                    <select name="- Marque -" id="- Marque -">
-                    <option value="- Marque -">- Marque -</option>    
-                    <option value="Tesla">Tesla</option>
-                    <option value="Ford">Ford</option>
-                    <option value="Peugeot">Peugeot</option>
-                    <option value="Renault">Renault</option>
+                    <select name="marques" required>
+                    <?php
+                        foreach($marques as $info)
+                            {
+                                echo "<option>";
+                                    echo ''.$info;
+                                        
+                                    
+                                echo "</option>";
+                            } 
+                    ?>
                     </select>
 
-                    <select name="- Couleur -" id="- Couleur -">
-                    <option value="- Couleur -">- Couleur -</option>    
-                    <option value="Noir">Noir</option>
-                    <option value="Blanc">Blanc</option>
-                    <option value="Gris">Gris</option>
-                    <option value="Argent">Argent</option>
-                    <option value="Jaune">Jaune</option>
-                    <option value="Rouge">Rouge</option>
-                    <option value="Bleu">Bleu</option>
-                    <option value="Vert">Vert</option>
+                    <select name="couleurs" required>
+                    <?php
+                        foreach($couleurs as $info)
+                            {
+                                echo "<option>";
+                                    echo ''.$info;
+                                        
+                                    
+                                echo "</option>";
+                            } 
+                    ?>
                     </select>
 
-                    <input type="number" min=0 placeholder="Prix d'achat" />
+                    <input type="number" min=0 placeholder="Prix d'achat" name="prix_achat" required />
 
-                    <input type="submit" value="Enregister" />
+                    <input type="submit" value="Enregister" name="addStock"   />
+                    
+                    
                     
                     
                 
-                </fieldset>
+          </fieldset>
         </form>
        
         <details>
-            <summary>Stocks</summary>
+            <summary>Stocks </summary>
                 <table>
                     <thead>
                         <tr>
@@ -171,41 +197,66 @@ var_dump($stocks);
                             <?php
                                 foreach($stocks as $info)
                                     {
-                                        //var_dump($info);
                                         echo "<tr>";
                                             echo "<td>";
                                                 echo $info['id'];
                                             echo "</td>";
+                                            echo "<td>";
+                                                echo $info['color'];
+                                            echo "</td>";
+                                            echo "<td>";
+                                                echo $info['model'];
+                                            echo "</td>";
+                                            echo "<td>";
+                                                echo $info['price'];
+                                            echo "</td>";
+                                            echo "<td>";
+                                                echo $info['entry'];
+                                            echo "</td>";
                                         echo "</tr>";
                                     } 
-
-
-
-
-
-
-
-
-
                             ?>
+                        
                     </tbody>
                 </table>
         </details>
-        <form>
+    <form>
             
 
                 <fieldset>
                     <legend>Entrée d'une vente </legend>
             
-                    <select name="- Voiture -" id="- Voiture -">
-                    <option value="- Voiture -">- Voiture -</option>    
+                    <select name="info_voiture" required >
+                    <?php
+                        foreach($stocks as $info)
+                            {
+                                echo ' <option value="'.$info['id'].'"> ';
+                                   
+                                    
+                                        echo $info['model'];
+                                        echo ' ';
+                                        echo $info['color'];
+                                        echo ' ';
+                                        echo $info['price'];
+                                        echo ' $';
+                                    
+                                            
+                                echo '</option>';
+                                
+                                   
+                                        
+                                    
+                                
+                            } 
+                    ?>
+                    </select>    
                     
-                    <input type="number" min=0 placeholder="Prix de vente" />
+                    <input type="number" min=0 placeholder="Prix de vente" name="price" required />
 
-                    <input type="submit" value="Enregister" />
+                    <input type="submit" value="Enregister" name="addSale" />
                 </fieldset>
-        </form>
-        <details>
+    </form>
+    <details>
             <summary>Ventes</summary>
                 <table>
                     <thead>
@@ -214,23 +265,51 @@ var_dump($stocks);
                             <th>Couleur</th>
                             <th>Marque</th>
                             <th>Bénéfice</th>
+                            
 
                         </tr>
                     </thead>
                     <tbody>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <?php
+                                    foreach($ventes as $info)
+                                        {
+                                            echo "<tr>";
+                                                echo "<td>";
+                                                    echo $info['soldDate'];
+                                                echo "</td>";
+                                                echo "<td>";
+                                                    echo $info['color'];
+                                                echo "</td>";
+                                                echo "<td>";
+                                                    echo $info['model'];
+                                                echo "</td>";
+                                                echo "<td>";
+                                                    echo $benefice= $info['soldPrice'] - $info['price'];
+                                                echo "</td>";
+
+                                                echo "<td>";
+                                                 if (($info['soldPrice'] - $info['price'])<=0)
+                                                 { 
+                                                     
+                                                    echo "❗";
+                                                    
+                                                 }
+                                                echo "</td>";
+
+                                                
+                                                
+                                            echo "</tr>";
+                                        } 
+                                ?>
                             
                     </tbody>
                 </table>
-        </details>
+    </details>
         
         
       
 
-        <footer>Copyright <a title="DELHAYE Eliott">E.DELHAYE</a> </footer>
-    </body>
+        <p>Copyright <a title="DELHAYE Eliott">E.DELHAYE</a> </p>
+</body>
     
 </html>
